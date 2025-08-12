@@ -1,0 +1,13 @@
+Raw_Read_Error_Rate
+Reallocated_Sector_Ct
+Power_On_Hours
+Power_Cycle_Count
+Unknown_Apple_Attrib
+Wear_Leveling_Count
+Host_Reads_MiB
+Host_Writes_MiB
+Temperature_Celsius
+Current_Pending_Sector
+UDMA_CRC_Error_Count
+SSD_Life_Left
+Percent_Life_Remaining

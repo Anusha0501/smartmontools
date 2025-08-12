@@ -1210,27 +1210,6 @@ static void set_json_globals_from_smart_attrib(int id, const char * name,
     return;
   }
 
-
-// onlyfailed=0 : print all attribute values
-// onlyfailed=1:  just ones that are currently failed and have prefailure bit set
-// onlyfailed=2:  ones that are failed, or have failed with or without prefailure bit set
-static void PrintSmartAttribWithThres(const ata_smart_values * data,
-                                      const ata_smart_thresholds_pvt * thresholds,
-                                      const ata_vendor_attr_defs & defs, int rpm,
-                                      int onlyfailed, unsigned char format)
-{
-  bool brief  = !!(format & ata_print_options::FMT_BRIEF);
-  bool hexid  = !!(format & ata_print_options::FMT_HEX_ID);
-  bool hexval = !!(format & ata_print_options::FMT_HEX_VAL);
-  bool needheader = true;
-
-  // step through all vendor attributes
-  for (int i = 0, ji = 0; i < NUMBER_ATA_SMART_ATTRIBUTES; i++) {
-    const ata_smart_attribute & attr = data->vendor_attributes[i];
-    int id = attr.id;
-    int normval = attr.normalized;
-    std::string name = lookup_vendor_attribute_name(attr.id);
-
 // --- Regex to match all known SSD endurance/lifetime-related SMART attributes ---
 // Covers vendor variations like 'SSD_Life_Left', 'DriveLife_Used%', 'Percent_Lifetime_Remain', etc.
 static const regular_expression endurance_regex(
@@ -1285,8 +1264,25 @@ if (lba_written_regex.full_match(name)) {
 std::cerr << "Unmatched SMART attribute: " << name
           << " (ID: " << id << ", normval: " << normval << ")" << std::endl;
 #endif
+}
+
+// onlyfailed=0 : print all attribute values
+// onlyfailed=1:  just ones that are currently failed and have prefailure bit set
+// onlyfailed=2:  ones that are failed, or have failed with or without prefailure bit set
+static void PrintSmartAttribWithThres(const ata_smart_values * data,
+                                      const ata_smart_thresholds_pvt * thresholds,
+                                      const ata_vendor_attr_defs & defs, int rpm,
+                                      int onlyfailed, unsigned char format)
+{
+  bool brief  = !!(format & ata_print_options::FMT_BRIEF);
+  bool hexid  = !!(format & ata_print_options::FMT_HEX_ID);
+  bool hexval = !!(format & ata_print_options::FMT_HEX_VAL);
+  bool needheader = true; 
 
 
+  // step through all vendor attributes
+  for (int i = 0, ji = 0; i < NUMBER_ATA_SMART_ATTRIBUTES; i++) {
+    const ata_smart_attribute & attr = data->vendor_attributes[i];
 
     // Check attribute and threshold
     unsigned char threshold = 0;
